@@ -1,42 +1,41 @@
-import webbrowser
 import openpyxl
+import random
+import webbrowser
 import time
 import pyautogui
+import urllib.parse
 
-def google_suche_aus_excel(excel_datei, spalte='A', start_zeile=1):
-    """
-    Öffnet Google im Browser, liest Suchbegriffe aus einer Excel-Datei,
-    gibt sie in das Suchfeld ein und wartet 15 Sekunden.
-
-    Args:
-        excel_datei (str): Pfad zur Excel-Datei.
-        spalte (str): Spalte, die die Suchbegriffe enthält (z.B. 'A').
-        start_zeile (int): Zeile, ab der die Suchbegriffe gelesen werden sollen.
-    """
+_suchmaschinen = [
+    "https://duckduckgo.com/?q={}",
+    "https://www.bing.com/search?q={}",
+    "https://duckduckgo.com/?q={}&t=h_&ia=web",
+]
+    # "https://www.ecosia.org/search?q={}",
+    
+def google_suche_aus_excel(excel_datei, spalte, start_zeile):
     try:
-        # Excel-Datei öffnen
         workbook = openpyxl.load_workbook(excel_datei)
         sheet = workbook.active
 
-        # Google im Standardbrowser öffnen
-        webbrowser.open_new_tab("https://www.google.com")
-        time.sleep(2)  # Zeit zum Laden der Seite geben
-
-        # Suchbegriffe aus Excel lesen und suchen
         zeile = start_zeile
         while sheet[f"{spalte}{zeile}"].value is not None:
-            suchbegriff = str(sheet[f"{spalte}{zeile}"].value)
-            pyautogui.write(suchbegriff)
-            pyautogui.press("enter")
+            suchbegriff = f"{str(sheet[f"{spalte}{zeile}"].value)} geschaeftsfuehrer"
+
+            suchmaschine_url = random.choice(_suchmaschinen)
+            suchbegriff_url = urllib.parse.quote_plus(suchbegriff)
+
+            google_url = suchmaschine_url.format(suchbegriff_url)
+
+            # Aktuellen Tab schließen (betriebssystemabhängig)
+            pyautogui.hotkey('ctrl', 'w')  # Windows/Linux
+            # pyautogui.hotkey('command', 'w') # MacOS
+            time.sleep(1) # kurze Pause damit der Tab auch geschlossen wird.
+
+            # Neue Suche im selben Fenster öffnen
+            webbrowser.open(google_url)
             print(f"Suche nach '{suchbegriff}' durchgeführt. Bitte Ergebnisse überprüfen.")
 
-            time.sleep(15)  # 15 Sekunden warten
-
-            # Neues Tab für die nächste Suche öffnen
-            pyautogui.hotkey('ctrl', 't')
-            pyautogui.write("https://www.google.com")
-            pyautogui.press("enter")
-            time.sleep(2)
+            time.sleep(12)  # 12 Sekunden warten
 
             zeile += 1
 
@@ -45,6 +44,13 @@ def google_suche_aus_excel(excel_datei, spalte='A', start_zeile=1):
     except Exception as e:
         print(f"Ein Fehler ist aufgetreten: {e}")
 
-# Beispielaufruf
-excel_datei = "suchbegriffe.xlsx"  # Ersetzen Sie dies durch Ihren Dateinamen
-google_suche_aus_excel(excel_datei)
+
+def main():
+    excel_datei = "D:\GoogleSearch\lead_search.xlsx"  # Ersetzen Sie dies durch Ihren Dateinamen
+    spalte = "A"
+    start_zeile = 2
+    google_suche_aus_excel(excel_datei, spalte, start_zeile)
+
+
+if __name__ == "__main__":
+    main()
