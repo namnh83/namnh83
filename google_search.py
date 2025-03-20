@@ -4,6 +4,7 @@ import webbrowser
 import time
 import pyautogui
 import urllib.parse
+import pygetwindow as gw
 
 _suchmaschinen = [
     "https://duckduckgo.com/?q={}",
@@ -25,19 +26,24 @@ def google_suche_aus_excel(excel_datei, spalte, start_zeile):
             suchbegriff_url = urllib.parse.quote_plus(suchbegriff)
 
             google_url = suchmaschine_url.format(suchbegriff_url)
+            # Browserfenster finden und in den Vordergrund bringen
+            browser_window = gw.getWindowsWithTitle("Google Chrome")[0]
 
-            # Aktuellen Tab schließen (betriebssystemabhängig)
-            pyautogui.hotkey('ctrl', 'w')  # Windows/Linux
-            # pyautogui.hotkey('command', 'w') # MacOS
-            time.sleep(1) # kurze Pause damit der Tab auch geschlossen wird.
+            if browser_window:
+                browser_window.activate()
+                time.sleep(0.5)  # Kurze Pause, um sicherzustellen, dass das Fenster aktiv ist
 
-            # Neue Suche im selben Fenster öffnen
-            webbrowser.open(google_url)
-            print(f"Suche nach '{suchbegriff}' durchgeführt. Bitte Ergebnisse überprüfen.")
+                # Aktuellen Tab schließen (betriebssystemabhängig)
+                pyautogui.hotkey('ctrl', 'w')  # Windows/Linux
+                # pyautogui.hotkey('command', 'w') # MacOS
+                time.sleep(0.5) # kurze Pause damit der Tab auch geschlossen wird.
 
-            time.sleep(12)  # 12 Sekunden warten
+                # Neue Suche im selben Fenster öffnen
+                webbrowser.open(google_url)
+                print(f"Suche nach '{suchbegriff}' durchgeführt. Bitte Ergebnisse überprüfen.")
 
-            zeile += 1
+                time.sleep(12)  # 12 Sekunden warten
+
 
     except FileNotFoundError:
         print(f"Fehler: Die Datei '{excel_datei}' wurde nicht gefunden.")
