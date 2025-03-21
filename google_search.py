@@ -9,7 +9,7 @@ import pygetwindow as gw
 _suchmaschinen = [
     "https://duckduckgo.com/?q={}",
     "https://www.bing.com/search?q={}",
-    "https://duckduckgo.com/?q={}&t=h_&ia=web",
+    "https://www.google.de/search?q={}",
 ]
     # "https://www.ecosia.org/search?q={}",
     
