@@ -34,9 +34,10 @@ def google_suche_aus_excel(excel_datei, spalte, start_zeile):
                 time.sleep(0.5)  # Kurze Pause, um sicherzustellen, dass das Fenster aktiv ist
 
                 # Aktuellen Tab schließen (betriebssystemabhängig)
+                pyautogui.FAILSAFE = False
                 pyautogui.hotkey('ctrl', 'w')  # Windows/Linux
                 # pyautogui.hotkey('command', 'w') # MacOS
-                time.sleep(0.5) # kurze Pause damit der Tab auch geschlossen wird.
+                time.sleep(1) # kurze Pause damit der Tab auch geschlossen wird.
 
                 # Neue Suche im selben Fenster öffnen
                 webbrowser.open(google_url)
@@ -44,6 +45,7 @@ def google_suche_aus_excel(excel_datei, spalte, start_zeile):
 
                 time.sleep(12)  # 12 Sekunden warten
 
+            zeile += 1
 
     except FileNotFoundError:
         print(f"Fehler: Die Datei '{excel_datei}' wurde nicht gefunden.")
