@@ -1,4 +1,4 @@
-- 👋 Hi, I’m @namnh83
+- 👋 Hi, I’m Hoang Nam Nguyen.
 - 🌱 I’m currently learning python.
 
 
