@@ -1,5 +1,5 @@
 - 👋 Hi, I’m Hoang Nam Nguyen.
-- 🌱 I’m currently learning python.
+- ☕ ➡️ 🐍 Import Coffee, Export Code.
 
 
 <!---
